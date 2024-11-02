@@ -8,10 +8,10 @@ device: "cuda"              # Options: 'cpu' or 'cuda'
 
 # Optimizer settings
 optimizer:
-  type: "sgd"               # Options: sgd, sgd_momentum, sgd_nesterov, sgd_weight_decay, adam, adamw, rmsprop
+  type: "adamw"               # Options: sgd, sgd_momentum, sgd_nesterov, sgd_weight_decay, adam, adamw, rmsprop
   momentum: 0.5              # Used for SGD optimizers
   weight_decay: 0.001       # Used for weight decay in SGD or AdamW
-  nesterov: true           # Used for SGD with Nesterov
+  nesterov: false           # Used for SGD with Nesterov
 
 # Learning Rate Scheduler settings
 #lr_scheduler:
@@ -40,3 +40,9 @@ early_stopping:
 # Data Augmentation settings
 data_augmentation:
   scheme: "standard"      # Options: "standard", "advanced", "none"
+
+# Logging settings
+logging:
+  tensorboard: true
+  wandb: true
+  wandb_project: "hw3_pipeline"

@@ -1,3 +1,5 @@
 /training_pipeline/data_cache/
 /training_pipeline/data/
 /training_pipeline/__pycache__/
+/training_pipeline/runs/
+/training_pipeline/wandb/
