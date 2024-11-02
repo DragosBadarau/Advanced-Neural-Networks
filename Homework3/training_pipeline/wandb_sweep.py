@@ -7,9 +7,6 @@ from data_loader import get_data_loaders
 from model import get_model
 from utils import get_optimizer, get_lr_scheduler, EarlyStopping
 
-# Import or define functions for your data loaders, model retrieval, etc.
-# Example: from your_project import get_data_loaders, get_model, get_optimizer, get_lr_scheduler, train_epoch, evaluate
-
 # 1. Sweep Configuration
 sweep_config = {
     'method': 'grid',  # or 'random' for a random search
@@ -24,14 +21,14 @@ sweep_config = {
         'data_augmentation': {
             'values': ['none', 'standard', 'advanced']
         },
-        'optimizer': {
-            'values': ['adamw', 'sgd']
+        'nesterov': {
+            'values': ['false', 'true']
         },
         'learning_rate': {
             'values': [0.001, 0.01]
         },
-        'batch_size': {
-            'values': [32, 64]
+        'momentum': {
+            'values': [0.5, 0.9]
         }
     }
 }
@@ -112,6 +109,9 @@ def train(config=None):
         optimizer = get_optimizer(config, model.parameters())
         scheduler = get_lr_scheduler(config, optimizer)
 
+        # Initialize Early Stopping
+        early_stopping = EarlyStopping(patience=5, min_delta=0.01, mode='min')
+
         # Training Loop
         for epoch in range(10):  # You can also get epochs from config if you want
             train_loss, train_accuracy = train_epoch(model, train_loader, criterion, optimizer, device)
@@ -130,6 +130,14 @@ def train(config=None):
             writer.add_scalar('Loss/test', test_loss, epoch)
             writer.add_scalar('Accuracy/train', train_accuracy, epoch)
             writer.add_scalar('Accuracy/test', test_accuracy, epoch)
+
+            # Check early stopping condition
+            early_stopping(test_loss, model)
+
+            # Log the result to WandB
+            if early_stopping.early_stop:
+                print("Early stopping triggered")
+                break
 
             # Update learning rate scheduler if applicable
             if scheduler:

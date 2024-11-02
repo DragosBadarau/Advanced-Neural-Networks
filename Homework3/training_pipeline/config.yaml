@@ -8,10 +8,10 @@ device: "cuda"              # Options: 'cpu' or 'cuda'
 
 # Optimizer settings
 optimizer:
-  type: "adam"               # Options: sgd, sgd_momentum, sgd_nesterov, sgd_weight_decay, adam, adamw, rmsprop
+  type: "sgd"               # Options: sgd, sgd_momentum, sgd_nesterov, sgd_weight_decay, adam, adamw, rmsprop
   momentum: 0.5              # Used for SGD optimizers
-  weight_decay: 0.001       # Used for weight decay in SGD or AdamW
-  nesterov: false           # Used for SGD with Nesterov
+  weight_decay: 0.0005       # Used for weight decay in SGD or AdamW
+  nesterov: true           # Used for SGD with Nesterov
 
 # Learning Rate Scheduler settings
 #lr_scheduler:
