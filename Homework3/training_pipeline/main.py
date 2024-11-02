@@ -53,14 +53,16 @@ def evaluate(model, data_loader, criterion, device):
     accuracy = 100. * correct / len(data_loader.dataset)
     return total_loss / len(data_loader), accuracy
 
+
 def main():
     config = get_config()
     device = torch.device(config['device'] if torch.cuda.is_available() else 'cpu')
 
     # Initialize TensorBoard and wandb
+    log_dir = "tensorboard_logs"
     writer = None
     if config['logging']['tensorboard']:
-        writer = SummaryWriter()  # log_dir can be specified if desired
+        writer = SummaryWriter(log_dir=log_dir)  # log_dir can be specified if desired
 
     if config['logging']['wandb']:
         wandb.init(project=config['logging']['wandb_project'], config=config)
@@ -144,6 +146,7 @@ def main():
     # Finish wandb run outside the loop
     if config['logging']['wandb']:
         wandb.finish()
+
 
 if __name__ == "__main__":
     main()

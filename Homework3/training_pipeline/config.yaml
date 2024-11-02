@@ -1,14 +1,14 @@
 dataset: "CIFAR100"          # Choose between MNIST, CIFAR10, CIFAR100
 model: "resnet18"           # Options: resnet18, preactresnet18 for CIFAR; mlp, lenet for MNIST
 batch_size: 32
-learning_rate: 0.01
-epochs: 10
+learning_rate: 0.075
+epochs: 50
 cache_data: True
 device: "cuda"              # Options: 'cpu' or 'cuda'
 
 # Optimizer settings
 optimizer:
-  type: "adamw"               # Options: sgd, sgd_momentum, sgd_nesterov, sgd_weight_decay, adam, adamw, rmsprop
+  type: "adam"               # Options: sgd, sgd_momentum, sgd_nesterov, sgd_weight_decay, adam, adamw, rmsprop
   momentum: 0.5              # Used for SGD optimizers
   weight_decay: 0.001       # Used for weight decay in SGD or AdamW
   nesterov: false           # Used for SGD with Nesterov
@@ -27,7 +27,7 @@ lr_scheduler:
   type: "ReduceLROnPlateau"
   patience: 3
   factor: 0.1
-  mode: "min"
+  mode: "max"
 
 # Early stopping
 
@@ -35,11 +35,11 @@ early_stopping:
   enabled: true
   patience: 7           # Number of epochs with no improvement after which training will be stopped
   min_delta: 0.01       # Minimum change to qualify as an improvement
-  mode: "min"           # "min" for validation loss, "max" for validation accuracy
+  mode: "max"           # "min" for validation loss, "max" for validation accuracy
 
 # Data Augmentation settings
 data_augmentation:
-  scheme: "standard"      # Options: "standard", "advanced", "none"
+  scheme: "none"      # Options: "standard", "advanced", "none"
 
 # Logging settings
 logging:
