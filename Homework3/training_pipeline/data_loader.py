@@ -35,14 +35,70 @@ def get_dataset(dataset_name, train=True, transform=None):
         raise ValueError("Unsupported dataset. Choose from MNIST, CIFAR10, CIFAR100.")
 
 
-def get_data_loaders(dataset_name, batch_size, cache_data):
-    train_transform, test_transform = get_data_transforms()
+def get_data_loaders(dataset_name, batch_size, cache_data, augmentation_scheme="none"):
+    # Get appropriate transformation for training and testing datasets
+    train_transform = get_augmentation_transforms(augmentation_scheme)
 
-    train_dataset = get_dataset(dataset_name, train=True, transform=train_transform)
-    test_dataset = get_dataset(dataset_name, train=False, transform=test_transform)
+    # Test set: No augmentation, just normalization
+    test_transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.5,), (0.5,)) if dataset_name == "MNIST" else transforms.Normalize((0.5, 0.5, 0.5),
+                                                                                                  (0.5, 0.5, 0.5)),
+    ])
 
-    # Configure DataLoaders
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+    # Choose the dataset
+    if dataset_name == "CIFAR10":
+        train_dataset = datasets.CIFAR10(root="data", train=True, download=True, transform=train_transform)
+        test_dataset = datasets.CIFAR10(root="data", train=False, download=True, transform=test_transform)
+    elif dataset_name == "CIFAR100":
+        train_dataset = datasets.CIFAR100(root="data", train=True, download=True, transform=train_transform)
+        test_dataset = datasets.CIFAR100(root="data", train=False, download=True, transform=test_transform)
+    elif dataset_name == "MNIST":
+        train_dataset = datasets.MNIST(root="data", train=True, download=True, transform=train_transform)
+        test_dataset = datasets.MNIST(root="data", train=False, download=True, transform=test_transform)
+    else:
+        raise ValueError(f"Unsupported dataset: {dataset_name}")
+
+    # DataLoaders
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
     return train_loader, test_loader
+
+
+from torchvision import datasets, transforms
+
+
+def get_augmentation_transforms(scheme):
+    if scheme == "none":
+        # No augmentation, only normalization
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.5,), (0.5,)) if datasets == "MNIST" else transforms.Normalize((0.5, 0.5, 0.5),
+                                                                                                  (0.5, 0.5, 0.5)),
+        ])
+
+    elif scheme == "standard":
+        # Standard augmentations (random crop and flip)
+        transform = transforms.Compose([
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        ])
+
+    elif scheme == "advanced":
+        # Advanced augmentations (additional color jitter and random erasing)
+        transform = transforms.Compose([
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+            transforms.RandomErasing(scale=(0.02, 0.2))
+        ])
+
+    else:
+        raise ValueError(f"Unsupported augmentation scheme: {scheme}")
+
+    return transform

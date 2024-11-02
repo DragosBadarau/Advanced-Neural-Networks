@@ -1,1 +1,3 @@
 /training_pipeline/data_cache/
+/training_pipeline/data/
+/training_pipeline/__pycache__/
