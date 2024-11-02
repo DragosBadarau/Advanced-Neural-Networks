@@ -2,8 +2,8 @@ import torch
 import torch.optim as optim
 from torch import nn
 from data_loader import get_data_loaders
-from model import SimpleCNN
-from utils import get_config
+from model import get_model
+from utils import get_config, get_optimizer
 
 
 def train_epoch(model, data_loader, criterion, optimizer, device):
@@ -39,10 +39,13 @@ def main():
     # Set up DataLoaders
     train_loader, test_loader = get_data_loaders(config['dataset'], config['batch_size'], config['cache_data'])
 
-    # Model, criterion, optimizer
-    model = SimpleCNN(num_classes=10 if config['dataset'] != 'CIFAR100' else 100).to(device)
+    # Load model based on configuration
+    model = get_model(config['model'], config['dataset']).to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=config['learning_rate'])
+
+    # Initialize optimizer based on configuration
+    optimizer = get_optimizer(config, model.parameters())
 
     # Training Loop
     for epoch in range(config['epochs']):

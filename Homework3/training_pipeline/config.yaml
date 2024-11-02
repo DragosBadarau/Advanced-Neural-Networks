@@ -1,6 +1,14 @@
-dataset: "CIFAR10"          # Choose between MNIST, CIFAR10, CIFAR100
-batch_size: 64
-learning_rate: 0.001
+dataset: "CIFAR100"          # Choose between MNIST, CIFAR10, CIFAR100
+model: "resnet18"           # Options: resnet18, preactresnet18 for CIFAR; mlp, lenet for MNIST
+batch_size: 32
+learning_rate: 0.01
 epochs: 10
 cache_data: True
 device: "cuda"              # Options: 'cpu' or 'cuda'
+
+# Optimizer settings
+optimizer:
+  type: "adam"               # Options: sgd, sgd_momentum, sgd_nesterov, sgd_weight_decay, adam, adamw, rmsprop
+  momentum: 0.5              # Used for SGD optimizers
+  weight_decay: 0.001       # Used for weight decay in SGD or AdamW
+  nesterov: false            # Used for SGD with Nesterov
