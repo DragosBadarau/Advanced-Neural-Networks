@@ -75,7 +75,7 @@ class LeNet(nn.Module):
 def get_model(model_name, dataset_name):
     if dataset_name in ["CIFAR10", "CIFAR100"]:
         if model_name == "resnet18":
-            return timm.create_model("resnet18", pretrained=False,
+            return timm.create_model("resnet18", pretrained=True,
                                      num_classes=(10 if dataset_name == "CIFAR10" else 100))
         elif model_name == "preactresnet18":
             return PreActResNet18(num_classes=(10 if dataset_name == "CIFAR10" else 100))

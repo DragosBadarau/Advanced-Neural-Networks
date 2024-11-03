@@ -1,7 +1,7 @@
 dataset: "CIFAR100"          # Choose between MNIST, CIFAR10, CIFAR100
 model: "resnet18"           # Options: resnet18, preactresnet18 for CIFAR; mlp, lenet for MNIST
 batch_size: 32
-learning_rate: 0.075
+learning_rate: 0.09
 epochs: 50
 cache_data: True
 device: "cuda"              # Options: 'cpu' or 'cuda'
@@ -10,8 +10,8 @@ device: "cuda"              # Options: 'cpu' or 'cuda'
 optimizer:
   type: "sgd"               # Options: sgd, sgd_momentum, sgd_nesterov, sgd_weight_decay, adam, adamw, rmsprop
   momentum: 0.5              # Used for SGD optimizers
-  weight_decay: 0.0005       # Used for weight decay in SGD or AdamW
-  nesterov: true           # Used for SGD with Nesterov
+  weight_decay: 0.005       # Used for weight decay in SGD or AdamW
+  nesterov: false           # Used for SGD with Nesterov
 
 # Learning Rate Scheduler settings
 #lr_scheduler:
@@ -26,7 +26,7 @@ optimizer:
 lr_scheduler:
   type: "ReduceLROnPlateau"
   patience: 3
-  factor: 0.1
+  factor: 0.01
   mode: "max"
 
 # Early stopping
@@ -45,4 +45,4 @@ data_augmentation:
 logging:
   tensorboard: true
   wandb: true
-  wandb_project: "hw3_pipeline"
+  wandb_project: "pipeline_hw3_sweep"

@@ -18,19 +18,24 @@
 To execute the script : 
 : **python main.py --config config.yaml**
 
+### Wandb Report with multiple tests taken 
+
+https://api.wandb.ai/links/dragos_badarau-alexandru-ioan-cuza-university-of-iasi/vqs5cmzq 
+
+
 
 
 ## Parameter Sweep Setup
 
 ### Parameters Varied
 
-For the sweep, I experimented with the following parameters:
+For the sweep, I experimented with the following parameters in the `wandb_sweep.py` file:
 
 - **Model Architecture**: `resnet18` and `preactresnet18`
 - **Data Augmentation**: None, Standard and Advanced schemes
-- **Optimizer**: AdamW and SGD
-- **Learning Rate**: 0.001 and 0.01
-- **Batch Size**: 32 and 64
+- **Optimizer**: SGD
+- **Learning Rate**:  [0.1, 0.075]
+- **Nesterov**: True or False 
 
 ### Hyperparameter Configurations
 

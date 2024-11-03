@@ -76,7 +76,8 @@ def get_augmentation_transforms(scheme):
         # No augmentation, only normalization
         transform = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize((0.5,), (0.5,)) if datasets == "MNIST" else transforms.Normalize(CIFAR100_TRAIN_MEAN,
+            transforms.Normalize(CIFAR100_TRAIN_MEAN,
+                                 CIFAR100_TRAIN_STD) if datasets == "MNIST" else transforms.Normalize(CIFAR100_TRAIN_MEAN,
                                                                                                   CIFAR100_TRAIN_STD),
         ])
 

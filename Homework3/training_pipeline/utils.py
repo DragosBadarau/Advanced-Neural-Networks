@@ -23,17 +23,29 @@ def get_config():
     config['device'] = os.getenv('DEVICE', config.get('device', 'cuda'))
     return config
 
-
 def get_optimizer(config, model_params):
-    optimizer_type = config["optimizer"]["type"].lower()
+    optimizer_config = config.get("optimizer", {})
+    optimizer_type = optimizer_config.get("type", "sgd").lower()  # Default to 'sgd'
     learning_rate = config["learning_rate"]
-    weight_decay = config["optimizer"].get("weight_decay", 0)
+    weight_decay = optimizer_config.get("weight_decay", 0)
 
     if optimizer_type == "sgd":
         return optim.SGD(model_params, lr=learning_rate)
 
     elif optimizer_type == "sgd_momentum":
-        momentum = config["optimizer"].get("momentum", 0.9)
+        momentum = optimizer_config.get("momentum", 0.9)
+        return optim.SGD(model_params, lr=learning_rate, momentum=momentum)
+def get_optimizer(config, model_params):
+    optimizer_config = config.get("optimizer", {})
+    optimizer_type = optimizer_config.get("type", "sgd").lower()  # Default to 'sgd'
+    learning_rate = config["learning_rate"]
+    weight_decay = optimizer_config.get("weight_decay", 0)
+
+    if optimizer_type == "sgd":
+        return optim.SGD(model_params, lr=learning_rate)
+
+    elif optimizer_type == "sgd_momentum":
+        momentum = optimizer_config.get("momentum", 0.9)
         return optim.SGD(model_params, lr=learning_rate, momentum=momentum)
 
     elif optimizer_type == "sgd_nesterov":
