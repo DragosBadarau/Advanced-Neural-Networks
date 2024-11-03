@@ -1,5 +1,7 @@
 # Python implementation of a configurable, device-agnostic training pipeline in PyTorch.
 
+Configurable either trough
+command line arguments, configuration files or environment variables.
 
 ### Key Features Implemented
 
@@ -22,7 +24,7 @@ To execute the script :
 
 https://api.wandb.ai/links/dragos_badarau-alexandru-ioan-cuza-university-of-iasi/vqs5cmzq 
 
-
+![Statistics Image](training_pipeline/pictures/Wandb%20Stats.png)
 
 
 ## Parameter Sweep Setup
@@ -43,3 +45,6 @@ Each run used CIFAR-100 as the dataset, with `ReduceLROnPlateau` as the learning
 
 To execute the script : 
 : **python wandb_sweep.py**
+
+
+### Expected points to receive: 14 
