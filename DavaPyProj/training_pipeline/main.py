@@ -61,11 +61,11 @@ def main():
     # Initialize TensorBoard and wandb
     log_dir = "tensorboard_logs"
     writer = None
-    if config['logging']['tensorboard']:
-        writer = SummaryWriter(log_dir=log_dir)  # log_dir can be specified if desired
+    # if config['logging']['tensorboard']:
+    #     writer = SummaryWriter(log_dir=log_dir)  # log_dir can be specified if desired
 
-    if config['logging']['wandb']:
-        wandb.init(project=config['logging']['wandb_project'], config=config)
+    # if config['logging']['wandb']:
+    #     wandb.init(project=config['logging']['wandb_project'], config=config)
 
     # Set up DataLoaders with data augmentation
     train_loader, test_loader = get_data_loaders(
@@ -115,14 +115,14 @@ def main():
             writer.add_scalar('Accuracy/test', test_accuracy, epoch)
 
         # Log metrics to wandb
-        if config['logging']['wandb']:
-            wandb.log({
-                'Loss/train': train_loss,
-                'Accuracy/train': train_accuracy,
-                'Loss/test': test_loss,
-                'Accuracy/test': test_accuracy,
-                'epoch': epoch
-            })
+        # if config['logging']['wandb']:
+        #     wandb.log({
+        #         'Loss/train': train_loss,
+        #         'Accuracy/train': train_accuracy,
+        #         'Loss/test': test_loss,
+        #         'Accuracy/test': test_accuracy,
+        #         'epoch': epoch
+        #     })
 
         # Step the scheduler if applicable
         if scheduler is not None:
@@ -143,22 +143,22 @@ def main():
     if writer:
         writer.close()
 
-    # Finish wandb run outside the loop
-    if config['logging']['wandb']:
-        wandb.finish()
+    # # Finish wandb run outside the loop
+    # if config['logging']['wandb']:
+    #     wandb.finish()
 
 
 def run_training(config):  # Use config as a parameter instead of loading it inside the function
     device = torch.device(config['device'] if torch.cuda.is_available() else 'cpu')
 
     # Initialize TensorBoard and wandb
-    log_dir = "tensorboard_logs"
+    # log_dir = "tensorboard_logs"
     writer = None
-    if config['logging']['tensorboard']:
-        writer = SummaryWriter(log_dir=log_dir)  # log_dir can be specified if desired
+    # if config['logging']['tensorboard']:
+    #     writer = SummaryWriter(log_dir=log_dir)  # log_dir can be specified if desired
 
-    if config['logging']['wandb']:
-        wandb.init(project=config['logging']['wandb_project'], config=config)
+    # if config['logging']['wandb']:
+    #     wandb.init(project=config['logging']['wandb_project'], config=config)
 
     # Set up DataLoaders with data augmentation
     train_loader, test_loader = get_data_loaders(
@@ -201,21 +201,21 @@ def run_training(config):  # Use config as a parameter instead of loading it ins
               f"Test Loss: {test_loss:.4f}, Test Accuracy: {test_accuracy:.2f}%")
 
         # Log metrics to TensorBoard
-        if writer:
-            writer.add_scalar('Loss/train', train_loss, epoch)
-            writer.add_scalar('Accuracy/train', train_accuracy, epoch)
-            writer.add_scalar('Loss/test', test_loss, epoch)
-            writer.add_scalar('Accuracy/test', test_accuracy, epoch)
+        # if writer:
+        #     writer.add_scalar('Loss/train', train_loss, epoch)
+        #     writer.add_scalar('Accuracy/train', train_accuracy, epoch)
+        #     writer.add_scalar('Loss/test', test_loss, epoch)
+        #     writer.add_scalar('Accuracy/test', test_accuracy, epoch)
 
         # Log metrics to wandb
-        if config['logging']['wandb']:
-            wandb.log({
-                'Loss/train': train_loss,
-                'Accuracy/train': train_accuracy,
-                'Loss/test': test_loss,
-                'Accuracy/test': test_accuracy,
-                'epoch': epoch
-            })
+        # if config['logging']['wandb']:
+        #     wandb.log({
+        #         'Loss/train': train_loss,
+        #         'Accuracy/train': train_accuracy,
+        #         'Loss/test': test_loss,
+        #         'Accuracy/test': test_accuracy,
+        #         'epoch': epoch
+        #     })
 
         # Step the scheduler if applicable
         if scheduler is not None:
@@ -237,8 +237,8 @@ def run_training(config):  # Use config as a parameter instead of loading it ins
         writer.close()
 
     # Finish wandb run outside the loop
-    if config['logging']['wandb']:
-        wandb.finish()
+    # if config['logging']['wandb']:
+    #     wandb.finish()
 
 
 if __name__ == "__main__":
