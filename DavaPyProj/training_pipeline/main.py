@@ -1,11 +1,18 @@
+
 import torch
 import torch.optim as optim
 from torch import nn
 from data_loader import get_data_loaders
 from model import get_model
-from utils import get_config, get_optimizer, get_lr_scheduler, EarlyStopping
+from utils import (
+    get_config,
+    get_optimizer,
+    get_lr_scheduler,
+    EarlyStopping
+)
 from torch.utils.tensorboard import SummaryWriter
 import wandb
+
 
 
 def train_epoch(model, train_loader, criterion, optimizer, device):
@@ -16,18 +23,14 @@ def train_epoch(model, train_loader, criterion, optimizer, device):
 
     for inputs, labels in train_loader:
         inputs, labels = inputs.to(device), labels.to(device)
-
         optimizer.zero_grad()
         outputs = model(inputs)
         loss = criterion(outputs, labels)
-
         # Backpropagation and optimization
         loss.backward()
         optimizer.step()
-
         # Accumulate loss
         running_loss += loss.item() * inputs.size(0)
-
         # Calculate accuracy
         _, predicted = torch.max(outputs, 1)
         correct += (predicted == labels).sum().item()
@@ -37,6 +40,7 @@ def train_epoch(model, train_loader, criterion, optimizer, device):
     epoch_loss = running_loss / total
     epoch_accuracy = 100 * correct / total
     return epoch_loss, epoch_accuracy
+
 
 
 def evaluate(model, data_loader, criterion, device):
@@ -50,11 +54,12 @@ def evaluate(model, data_loader, criterion, device):
             total_loss += criterion(outputs, labels).item()
             pred = outputs.argmax(dim=1, keepdim=True)
             correct += pred.eq(labels.view_as(pred)).sum().item()
-    accuracy = 100. * correct / len(data_loader.dataset)
+    accuracy = 100.0 * correct / len(data_loader.dataset)
     return total_loss / len(data_loader), accuracy
 
 
-def main():
+
+
     config = get_config()
     device = torch.device(config['device'] if torch.cuda.is_available() else 'cpu')
 
@@ -62,7 +67,7 @@ def main():
     log_dir = "tensorboard_logs"
     writer = None
     # if config['logging']['tensorboard']:
-    #     writer = SummaryWriter(log_dir=log_dir)  # log_dir can be specified if desired
+    #     writer = SummaryWriter(log_dir=log_dir)
 
     # if config['logging']['wandb']:
     #     wandb.init(project=config['logging']['wandb_project'], config=config)
@@ -97,15 +102,21 @@ def main():
     # Training Loop
     for epoch in range(config['epochs']):
         # Train the model for one epoch
-        train_loss, train_accuracy = train_epoch(model, train_loader, criterion, optimizer, device)
+        train_loss, train_accuracy = train_epoch(
+            model, train_loader, criterion, optimizer, device
+        )
 
         # Evaluate the model on the test set
-        test_loss, test_accuracy = evaluate(model, test_loader, criterion, device)
+        test_loss, test_accuracy = evaluate(
+            model, test_loader, criterion, device
+        )
 
         # Print metrics
-        print(f"Epoch {epoch + 1}/{config['epochs']}, "
-              f"Train Loss: {train_loss:.4f}, Train Accuracy: {train_accuracy:.2f}%, "
-              f"Test Loss: {test_loss:.4f}, Test Accuracy: {test_accuracy:.2f}%")
+        print(
+            f"Epoch {epoch + 1}/{config['epochs']}, "
+            f"Train Loss: {train_loss:.4f}, Train Accuracy: {train_accuracy:.2f}%, "
+            f"Test Loss: {test_loss:.4f}, Test Accuracy: {test_accuracy:.2f}%"
+        )
 
         # Log metrics to TensorBoard
         if writer:
@@ -155,7 +166,7 @@ def run_training(config):  # Use config as a parameter instead of loading it ins
     # log_dir = "tensorboard_logs"
     writer = None
     # if config['logging']['tensorboard']:
-    #     writer = SummaryWriter(log_dir=log_dir)  # log_dir can be specified if desired
+    #     writer = SummaryWriter(log_dir=log_dir)
 
     # if config['logging']['wandb']:
     #     wandb.init(project=config['logging']['wandb_project'], config=config)
@@ -190,15 +201,21 @@ def run_training(config):  # Use config as a parameter instead of loading it ins
     # Training Loop
     for epoch in range(config['epochs']):
         # Train the model for one epoch
-        train_loss, train_accuracy = train_epoch(model, train_loader, criterion, optimizer, device)
+        train_loss, train_accuracy = train_epoch(
+            model, train_loader, criterion, optimizer, device
+        )
 
         # Evaluate the model on the test set
-        test_loss, test_accuracy = evaluate(model, test_loader, criterion, device)
+        test_loss, test_accuracy = evaluate(
+            model, test_loader, criterion, device
+        )
 
         # Print metrics
-        print(f"Epoch {epoch + 1}/{config['epochs']}, "
-              f"Train Loss: {train_loss:.4f}, Train Accuracy: {train_accuracy:.2f}%, "
-              f"Test Loss: {test_loss:.4f}, Test Accuracy: {test_accuracy:.2f}%")
+        print(
+            f"Epoch {epoch + 1}/{config['epochs']}, "
+            f"Train Loss: {train_loss:.4f}, Train Accuracy: {train_accuracy:.2f}%, "
+            f"Test Loss: {test_loss:.4f}, Test Accuracy: {test_accuracy:.2f}%"
+        )
 
         # Log metrics to TensorBoard
         # if writer:

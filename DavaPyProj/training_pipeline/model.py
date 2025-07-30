@@ -1,7 +1,9 @@
-import torch.nn as nn
-import timm
+
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
+import timm
+
 
 
 class SimpleCNN(nn.Module):
@@ -22,6 +24,7 @@ class SimpleCNN(nn.Module):
         x = self.fc2(x)
         return x
 
+
 class PreActResNet18(nn.Module):
     # Define the PreActResNet18 model as required in Lab 2.
     def __init__(self, num_classes=10):
@@ -34,6 +37,7 @@ class PreActResNet18(nn.Module):
     def forward(self, x):
         # Define forward pass
         return x
+
 
 
 class MLP(nn.Module):
@@ -49,6 +53,7 @@ class MLP(nn.Module):
         x = nn.ReLU()(self.fc2(x))
         x = self.fc3(x)
         return x
+
 
 
 class LeNet(nn.Module):
@@ -72,11 +77,14 @@ class LeNet(nn.Module):
         return x
 
 
+
 def get_model(model_name, dataset_name):
     if dataset_name in ["CIFAR10", "CIFAR100"]:
         if model_name == "resnet18":
-            return timm.create_model("resnet18", pretrained=True,
-                                     num_classes=(10 if dataset_name == "CIFAR10" else 100))
+            return timm.create_model(
+                "resnet18", pretrained=True,
+                num_classes=(10 if dataset_name == "CIFAR10" else 100)
+            )
         elif model_name == "preactresnet18":
             return PreActResNet18(num_classes=(10 if dataset_name == "CIFAR10" else 100))
         else:
