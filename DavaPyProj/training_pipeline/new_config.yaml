@@ -1,0 +1,35 @@
+device: "cuda"
+dataset: "CIFAR10"
+model: "resnet18"
+batch_size: 64
+epochs: 20
+learning_rate: 0.01
+cache_data: true
+
+optimizer:
+  type: "sgd_nesterov"
+  momentum: 0.9
+  nesterov: true
+  weight_decay: 0.0005
+
+lr_scheduler:
+  type: "steplr"
+  step_size: 5
+  gamma: 0.5
+  patience: 10
+  factor: 0.1
+  mode: "min"
+
+early_stopping:
+  enabled: true
+  patience: 7
+  min_delta: 0.01
+  mode: "min"
+
+data_augmentation:
+  scheme: "standard"
+
+logging:
+  tensorboard: true
+  wandb: true
+  wandb_project: "my_training_pipeline"
